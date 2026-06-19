@@ -1,5 +1,5 @@
 import streamlit as st
-import spacy
+import re
 import tiktoken
 import pandas as pd
 import plotly.express as px
@@ -9,17 +9,11 @@ st.set_page_config(page_title="LLM Text Pipeline Visualizer", layout="wide")
 st.title("🔹 LLM Text Pipeline Visualizer")
 st.caption("Visualize text extraction, custom sliding chunk sizes, overlaps, and tokenization.")
 
-# Load Spacy safely with caching
+# Simple sentence splitting without spaCy
 @st.cache_resource
-def load_spacy():
-    try:
-        return spacy.load("en_core_web_sm")
-    except OSError:
-        from spacy.cli import download
-        download("en_core_web_sm")
-        return spacy.load("en_core_web_sm")
-
-nlp = load_spacy()
+def split_sentences(text: str) -> list[str]:
+    pattern = re.compile(r'(?<=[.!?])\s+')
+    return [sentence.strip() for sentence in pattern.split(text) if sentence.strip()]
 
 # Sidebar Configurations
 st.sidebar.header("⚙️ Chunking Configuration")
@@ -60,8 +54,7 @@ if user_text.strip():
     # ---------------------------------------------------------
     # 1. SENTENCE EXTRACTION
     # ---------------------------------------------------------
-    doc = nlp(user_text)
-    sentences = [sent.text.strip() for sent in doc.sents if sent.text.strip()]
+    sentences = split_sentences(user_text)
     
     # ---------------------------------------------------------
     # 2. CUSTOM CHUNKING WITH OVERLAP (Sliding Window over Words)
