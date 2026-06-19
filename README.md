@@ -1,138 +1,65 @@
-# 🔹 LLM Text Pipeline Visualizer
+# LLM Text Pipeline Visualizer
 
-A Streamlit-based application for visualizing text extraction, custom chunking with overlaps, and tokenization processes for Large Language Models (LLMs).
+A Streamlit app for visualizing sentence extraction, custom overlapping chunks, tokenization, and text-processing metrics for LLM workflows.
 
 ## Features
 
-- **📝 Sentence Extraction** - Extract and analyze individual sentences from input text using spaCy NLP
-- **🧩 Custom Overlap Chunks** - Create text chunks with configurable size and overlap for better LLM processing
-- **🎟️ Tokenization Process** - Visualize how text is tokenized using OpenAI's tiktoken encoder
-- **📊 Analytics Dashboard** - View detailed metrics about your text processing pipeline
+- Sentence extraction with a lightweight regex splitter
+- Custom sliding-window chunks with configurable overlap
+- Token visualization using simple word and punctuation token splitting
+- Analytics dashboard with chunk and token metrics
 
-## Installation
-
-### Prerequisites
-- Python 3.8+
-- pip
-
-### Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd chunking-model
-   ```
-
-2. **Create a virtual environment (optional but recommended)**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Download spaCy model**
-   ```bash
-   python -m spacy download en_core_web_sm
-   ```
-
-## Running Locally
+## Run Locally
 
 ```bash
+pip install -r requirements.txt
 streamlit run app2.py
 ```
 
-The app will open at `http://localhost:8501`
+The app opens at `http://localhost:8501`.
 
-## Configuration
+## Deploy on Render for Free
 
-Use the sidebar to configure:
-- **Max Chunk Size** - Number of words per chunk (5-100)
-- **Chunk Overlap** - Words carried over between chunks (0-50)
+This repo includes a Render Blueprint in `render.yaml`, so Render can auto-fill the service settings.
 
-**Note:** Overlap must be strictly less than chunk size
+1. Push this folder to a GitHub repository.
+2. Go to `https://render.com` and sign in.
+3. Click `New +` and choose `Blueprint`.
+4. Connect the GitHub repository for this project.
+5. Select the `render.yaml` file if Render asks for it.
+6. Click `Apply` or `Deploy`.
 
-## Dependencies
+Render will create a free Python web service with:
 
-- **streamlit** - Web application framework
-- **spacy** - Natural language processing
-- **plotly** - Interactive visualizations
+- Build command: `pip install --upgrade pip && pip install -r requirements.txt`
+- Start command: `streamlit run app2.py --server.port=$PORT --server.address=0.0.0.0`
+- Python version: `3.11.11`, pinned in `.python-version` and `render.yaml`
 
-See `requirements.txt` for exact versions
+After deploy, your app URL will look like:
 
-## Deployment on Render
+```text
+https://llm-text-pipeline.onrender.com
+```
 
-### Free Deployment Steps
+If that name is already taken, Render will assign a slightly different URL.
 
-1. **Push to GitHub**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin <your-repo-url>
-   git branch -M main
-   git push -u origin main
-   ```
+## Free Tier Notes
 
-2. **Deploy on Render**
-   - Go to [render.com](https://render.com)
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-   - The deployment will auto-configure from `render.yaml`
-   - Click "Deploy"
+This project pins Python to 3.11.11 because Render's current Python 3.14 default can break older Streamlit/protobuf dependencies. If you previously saw TypeError: Metaclasses with custom tp_new are not supported, redeploy after pushing these changes.\n\nRender free web services are good for demos and hobby apps, but they have limits:
 
-3. **Access Your App**
-   - Your live app will be at: `https://<service-name>.onrender.com`
-
-### Free Tier Details
-- ✅ Always free
-- ⏱️ App spins down after 15 min of inactivity (wakes up on request)
-- 💾 512 MB memory
-- 🔄 Auto-deploys on GitHub commits to main branch
+- The app spins down after 15 minutes without traffic.
+- The first request after spin-down can take about a minute.
+- Local file changes are not permanent after restarts or redeploys.
+- Free usage is limited by monthly included instance hours, bandwidth, and build minutes.
 
 ## Project Structure
 
-```
+```text
 .
-├── app2.py              # Main Streamlit application
-├── requirements.txt     # Python dependencies
-├── render.yaml         # Render deployment configuration
-├── .gitignore          # Git ignore rules
-└── README.md           # This file
+â”œâ”€â”€ app2.py
+â”œâ”€â”€ requirements.txt
+â”œâ”€â”€ render.yaml
+â”œâ”€â”€ .python-version
+â”œâ”€â”€ .gitignore
+â””â”€â”€ README.md
 ```
-
-## Usage Example
-
-1. Enter or paste text in the text area
-2. Adjust chunk size and overlap in the sidebar
-3. View results in four tabs:
-   - Sentence Extraction
-   - Custom Overlap Chunks
-   - Tokenization Process
-   - Analytics Dashboard
-
-## Troubleshooting
-
-**Issue:** spaCy model not found
-- **Solution:** Run `python -m spacy download en_core_web_sm`
-
-**Issue:** Port 8501 already in use
-- **Solution:** Use `streamlit run app2.py --server.port=8502`
-
-**Issue:** App is slow on Render free tier
-- **Solution:** Free tier apps spin down after inactivity. This is expected behavior.
-
-## License
-
-MIT License
-
-## Author
-
-Created for LLM text processing and visualization
-
-## Support
-
-For issues or feature requests, please create an issue on the GitHub repository.
