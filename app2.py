@@ -1,6 +1,5 @@
 import streamlit as st
 import re
-import tiktoken
 import plotly.express as px
 
 # Page Configuration
@@ -78,9 +77,8 @@ if user_text.strip():
     # ---------------------------------------------------------
     # 3. TOKENIZATION PROCESS
     # ---------------------------------------------------------
-    encoder = tiktoken.get_encoding("cl100k_base") 
-    all_tokens_raw = encoder.encode(user_text)
-    token_strings = [encoder.decode([t]) for t in all_tokens_raw]
+    token_strings = re.findall(r"\w+|[^\w\s]", user_text, re.UNICODE)
+    all_tokens_raw = token_strings
 
     # Create UI Tabs
     tab1, tab2, tab3, tab4 = st.tabs([
