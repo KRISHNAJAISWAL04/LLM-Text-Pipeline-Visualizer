@@ -60,7 +60,6 @@ Use the sidebar to configure:
 - **streamlit** - Web application framework
 - **spacy** - Natural language processing
 - **tiktoken** - OpenAI tokenizer
-- **pandas** - Data manipulation
 - **plotly** - Interactive visualizations
 
 See `requirements.txt` for exact versions

@@ -1,7 +1,6 @@
 import streamlit as st
 import re
 import tiktoken
-import pandas as pd
 import plotly.express as px
 
 # Page Configuration
@@ -131,12 +130,15 @@ if user_text.strip():
         st.subheader("Structure Distribution Breakdown")
         
         chunk_lengths = [len(c.split()) for c in chunks]
-        df_chunks = pd.DataFrame({
-            "Chunk Index": [f"Chunk {i+1}" for i in range(len(chunks))],
-            "Word Count": chunk_lengths
-        })
+        chunk_labels = [f"Chunk {i+1}" for i in range(len(chunks))]
         
-        fig = px.bar(df_chunks, x="Chunk Index", y="Word Count", title="Words Per Sliding Window Chunk", color="Word Count")
+        fig = px.bar(
+            x=chunk_labels,
+            y=chunk_lengths,
+            title="Words Per Sliding Window Chunk",
+            color=chunk_lengths,
+            labels={"x": "Chunk Index", "y": "Word Count"}
+        )
         st.plotly_chart(fig, use_container_width=True)
 else:
     st.warning("Please type or paste some text above to start the pipeline validation.")
